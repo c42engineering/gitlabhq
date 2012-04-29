@@ -23,4 +23,20 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     sign_in_and_redirect @user
   end
 
+  def google
+    omniauth_data = request.env["omniauth.auth"].info
+    if omniauth_data["email"] && omniauth_data["email"].ends_with?('c42.in')
+      @user = User.find_for_open_id(request.env["omniauth.auth"], current_user)
+      if @user.persisted?
+        flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
+        sign_in_and_redirect @user, :event => :authentication
+      else
+        session["devise.google_data"] = request.env["omniauth.auth"]
+        redirect_to new_user_session_path
+      end
+    else
+      flash[:notice] = "Login using C42 Engineering account"
+      redirect_to new_user_session_path
+    end
+  end
 end

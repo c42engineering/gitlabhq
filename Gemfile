@@ -42,6 +42,8 @@ gem 'resque_mailer'
 gem 'tabs_on_rails'
 gem 'settingslogic'
 
+gem 'omniauth-openid'
+
 group :assets do
   gem "sass-rails",   "3.2.5"
   gem "coffee-rails", "3.2.2"
